@@ -100,6 +100,12 @@ function HeroSection() {
                 <span className="text-gray-400">{"', '"}</span>
                 <span className="text-amber-300">Sequelize</span>
                 <span className="text-gray-400">{"', '"}</span>
+                <span className="text-amber-300">Next</span>
+                <span className="text-gray-400">{"', "}</span>
+                <span className="text-amber-300">TypeScript</span>
+                <span className="text-gray-400">{"', "}</span>
+                <span className="text-amber-300">JavaScript</span>
+                <span className="text-gray-400">{"', "}</span>
                 <span className="text-amber-300">HTML</span>
                 <span className="text-gray-400">{"', '"}</span>
                 <span className="text-amber-300">CSS</span>

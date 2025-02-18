@@ -1,3 +1,4 @@
+// Importar módulos necessários
 import axios from 'axios';
 import { NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
@@ -7,10 +8,10 @@ const transporter = nodemailer.createTransport({
   service: 'gmail',
   host: 'smtp.gmail.com',
   port: 587,
-  secure: false, 
+  secure: false,
   auth: {
     user: process.env.EMAIL_ADDRESS,
-    pass: process.env.GMAIL_PASSKEY, 
+    pass: process.env.GMAIL_PASSKEY,
   },
 });
 
@@ -27,7 +28,7 @@ async function sendTelegramMessage(token, chat_id, message) {
     console.error('Erro ao enviar mensagem do Telegram:', error.response?.data || error.message);
     return false;
   }
-};
+}
 
 // Modelo de e-mail HTML
 const generateEmailTemplate = (name, email, userMessage) => `
@@ -48,16 +49,16 @@ const generateEmailTemplate = (name, email, userMessage) => `
 // Função auxiliar para enviar um e-mail via Nodemailer
 async function sendEmail(payload, message) {
   const { name, email, message: userMessage } = payload;
-  
+
   const mailOptions = {
-    from: "Portfolio", 
-    to: process.env.EMAIL_ADDRESS, 
-    subject: `New Message From ${name}`, 
-    text: message, 
-    html: generateEmailTemplate(name, email, userMessage), 
-    replyTo: email, 
+    from: "Portfolio",
+    to: process.env.EMAIL_ADDRESS,
+    subject: `New Message From ${name}`,
+    text: message,
+    html: generateEmailTemplate(name, email, userMessage),
+    replyTo: email,
   };
-  
+
   try {
     await transporter.sendMail(mailOptions);
     return true;
@@ -65,8 +66,9 @@ async function sendEmail(payload, message) {
     console.error('Erro ao enviar e-mail:', error.message);
     return false;
   }
-};
+}
 
+// Rota de contato
 export async function POST(request) {
   try {
     const payload = await request.json();
@@ -74,7 +76,7 @@ export async function POST(request) {
     const token = process.env.TELEGRAM_BOT_TOKEN;
     const chat_id = process.env.TELEGRAM_CHAT_ID;
 
-    // Validar variáveis ​​de ambiente
+    // Validar variáveis de ambiente
     if (!token || !chat_id) {
       return NextResponse.json({
         success: false,
@@ -84,7 +86,7 @@ export async function POST(request) {
 
     const message = `New message from ${name}\n\nEmail: ${email}\n\nMessage:\n\n${userMessage}\n\n`;
 
-    // enviar mensagem do Telegram
+    // Enviar mensagem via Telegram
     const telegramSuccess = await sendTelegramMessage(token, chat_id, message);
 
     // Enviar e-mail
@@ -108,4 +110,4 @@ export async function POST(request) {
       message: 'Ocorreu um erro no servidor.',
     }, { status: 500 });
   }
-};
+}
